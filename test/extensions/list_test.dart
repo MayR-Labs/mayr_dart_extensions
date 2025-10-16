@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mayr_extensions/mayr_extensions.dart';
+import 'package:test/test.dart';
+import 'package:mayr_dart_extensions/mayr_dart_extensions.dart';
 
 void main() {
   group('Iterable Extensions', () {
