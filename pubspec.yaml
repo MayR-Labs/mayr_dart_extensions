@@ -1,7 +1,7 @@
 name: mayr_dart_extensions
 description: A comprehensive set of handy Dart extensions to make your code cleaner, shorter, and more expressive. Pure Dart package with zero Flutter dependencies.
 version: 1.0.0
-homepage: https://mayrlabs.com
+homepage: https://github.com/MayR-Labs/mayr_dart_extensions
 repository: https://github.com/MayR-Labs/mayr_dart_extensions
 issue_tracker: https://github.com/MayR-Labs/mayr_dart_extensions/issues
 documentation: https://github.com/MayR-Labs/mayr_dart_extensions/wiki
