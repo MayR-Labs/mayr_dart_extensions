@@ -67,10 +67,6 @@ extension MayrStringCompareExtensions on String {
 }
 
 extension MayrStringExtensions on String {
-  /// Copies the string to clipboard
-  void copyToClipboard() async =>
-      await Clipboard.setData(ClipboardData(text: this));
-
   /// Checks if the string matches the given regex
   bool matchesRegExp(String regex) => regex.toRegExp().hasMatch(this);
 
