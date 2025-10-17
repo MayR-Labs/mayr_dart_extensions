@@ -39,6 +39,45 @@ extension MayrDoubleExtensions on double {
   }
 }
 
+extension DoubleRange on double {
+  /// Creates a list of doubles from this value to [end] (inclusive).
+  ///
+  /// Example:
+  /// ```dart
+  /// 1.0.to(5.0); // [1.0, 2.0, 3.0, 4.0, 5.0]
+  /// 0.0.to(1.0, step: 0.25); // [0.0, 0.25, 0.5, 0.75, 1.0]
+  /// ```
+  List<double> to(double end, {double step = 1.0}) {
+    if (step <= 0) throw ArgumentError('step must be positive');
+    final result = <double>[];
+    if (this <= end) {
+      double current = this;
+      while (current <= end) {
+        result.add(current);
+        current += step;
+      }
+    } else {
+      double current = this;
+      while (current >= end) {
+        result.add(current);
+        current -= step;
+      }
+    }
+    return result;
+  }
+
+  /// Checks if this double is in the specified range.
+  ///
+  /// Example:
+  /// ```dart
+  /// 5.5.inRange(1.0, 10.0); // true
+  /// 10.5.inRange(1.0, 10.0); // false
+  /// ```
+  bool inRange(double min, double max) {
+    return this >= min && this <= max;
+  }
+}
+
 extension MayrIntExtensions on int {
   /// Generates a random integer less than this value but greater than or equal to [min].
   ///
@@ -105,6 +144,68 @@ extension MayrIntExtensions on int {
   void timesIndexed(void Function(int index) action) {
     for (int i = 0; i < this; i++) {
       action(i);
+    }
+  }
+}
+
+extension IntRange on int {
+  /// Creates a list of integers from this value to [end] (inclusive).
+  ///
+  /// Example:
+  /// ```dart
+  /// 1.to(5); // [1, 2, 3, 4, 5]
+  /// 1.to(10, step: 2); // [1, 3, 5, 7, 9]
+  /// ```
+  List<int> to(int end, {int step = 1}) {
+    if (step <= 0) throw ArgumentError('step must be positive');
+    final result = <int>[];
+    if (this <= end) {
+      for (int i = this; i <= end; i += step) {
+        result.add(i);
+      }
+    } else {
+      for (int i = this; i >= end; i -= step) {
+        result.add(i);
+      }
+    }
+    return result;
+  }
+
+  /// Creates a list of integers from this value to [end] (exclusive).
+  ///
+  /// Example:
+  /// ```dart
+  /// 1.until(5); // [1, 2, 3, 4]
+  /// 0.until(10, step: 2); // [0, 2, 4, 6, 8]
+  /// ```
+  List<int> until(int end, {int step = 1}) {
+    if (step <= 0) throw ArgumentError('step must be positive');
+    final result = <int>[];
+    if (this < end) {
+      for (int i = this; i < end; i += step) {
+        result.add(i);
+      }
+    } else {
+      for (int i = this; i > end; i -= step) {
+        result.add(i);
+      }
+    }
+    return result;
+  }
+
+  /// Checks if this integer is in the specified range.
+  ///
+  /// Example:
+  /// ```dart
+  /// 5.inRange(1, 10); // true
+  /// 5.inRange(1, 10, inclusive: false); // true
+  /// 10.inRange(1, 10, inclusive: false); // false
+  /// ```
+  bool inRange(int min, int max, {bool inclusive = true}) {
+    if (inclusive) {
+      return this >= min && this <= max;
+    } else {
+      return this > min && this < max;
     }
   }
 }
