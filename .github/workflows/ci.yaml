@@ -21,14 +21,16 @@ jobs:
       - name: 📚 Git Checkout
         uses: actions/checkout@v4
 
-      - name: 🐦 Setup Flutter
-        uses: subosito/flutter-action@v2
+      - name: 🎯 Setup Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
 
       - name: 📦 Install Dependencies
-        run: flutter pub get
+        run: dart pub get
 
       - name: Run tests
-        run: flutter test
+        run: dart test
 
       - name: ✨ Format
         run: dart format --set-exit-if-changed .
