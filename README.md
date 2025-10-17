@@ -1,8 +1,19 @@
-# mayr_dart_extensions
+![License](https://img.shields.io/badge/license-MIT-blue.svg?label=Licence)
+![Platform](https://img.shields.io/badge/Platform-Dart-blue.svg)
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Pub Version](https://img.shields.io/pub/v/mayr_dart_extensions?style=flat&label=pub)](https://pub.dev/packages/mayr_dart_extensions)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/MayR-Labs/mayr_dart_extensions/ci.yaml?label=build)](https://github.com/MayR-Labs/mayr_dart_extensions/actions)
+![Pub Version](https://img.shields.io/pub/v/mayr_dart_extensions?style=plastic&label=Version)
+![Pub.dev Score](https://img.shields.io/pub/points/mayr_dart_extensions?label=Score&style=plastic)
+![Pub Likes](https://img.shields.io/pub/likes/mayr_dart_extensions?label=Likes&style=plastic)
+![Pub.dev Publisher](https://img.shields.io/pub/publisher/mayr_dart_extensions?label=Publisher&style=plastic)
+![Downloads](https://img.shields.io/pub/dm/mayr_dart_extensions.svg?label=Downloads&style=plastic)
+
+![Build Status](https://img.shields.io/github/actions/workflow/status/MayR-Labs/mayr_dart_extensions/ci.yaml?label=Build)
+![Issues](https://img.shields.io/github/issues/MayR-Labs/mayr_dart_extensions.svg?label=Issues)
+![Last Commit](https://img.shields.io/github/last-commit/MayR-Labs/mayr_dart_extensions.svg?label=Latest%20Commit)
+![Contributors](https://img.shields.io/github/contributors/MayR-Labs/mayr_dart_extensions.svg?label=Contributors)
+
+
+# mayr_dart_extensions
 
 > A comprehensive collection of Dart extension methods to make your code cleaner, shorter, and more expressive.
 
