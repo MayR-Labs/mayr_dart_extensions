@@ -27,7 +27,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  mayr_dart_extensions: ^1.0.0
+  mayr_dart_extensions: ^1.1.0
 ```
 
 Or install via command line:
@@ -48,14 +48,19 @@ import 'package:mayr_dart_extensions/mayr_dart_extensions.dart';
 
 | Extension Type | Key Features |
 |----------------|--------------|
-| **String** | Case conversion, validation, formatting, masking, pattern matching |
-| **Number** | Clamping, random generation, formatting, duration conversion |
+| **String** | Case conversion, validation, formatting, masking, templates, Base64 |
+| **Number** | Clamping, random generation, formatting, ranges, duration conversion |
 | **DateTime** | Time checks, manipulation, age calculation, formatting |
 | **Duration** | Delays, readable strings, comparisons |
 | **List/Iterable** | Safe access, transformations, aggregations, mutations |
 | **Map** | Safe access, transformations, merging |
 | **Set** | Toggle, intersections, subset operations |
 | **Bool** | Conditional selection, conversions |
+| **Function** | Composition, memoization, debounce, throttle |
+| **Future** | Timeout, retry, error handling, loading state |
+| **Stream** | Debounce, throttle, distinct, buffer, retry |
+| **Uri** | Query params, domain/subdomain extraction, security checks |
+| **Enum** | Display names, JSON conversion, string lookup |
 | **Object** | Functional operations (`let`, `also`) |
 | **Humanize** | Convert data to human-readable formats |
 
@@ -127,6 +132,66 @@ import 'package:mayr_dart_extensions/mayr_dart_extensions.dart';
 '{"name":"John","age":30}'.prettyJson();
 '<root><item>value</item></root>'.prettyXml();
 'name: John\nage: 30'.prettyYaml();
+```
+</details>
+
+<details>
+<summary><b>String Templates</b></summary>
+
+```dart
+// Named placeholders
+'Hello {name}, you are {age} years old'.format({'name': 'John', 'age': 30});
+// 'Hello John, you are 30 years old'
+
+// Positional placeholders
+'Hello {0}, you are {1} years old'.formatList(['John', 30]);
+
+// Interpolation with resolver
+'Hello {name}'.interpolate((key) => key == 'name' ? 'John' : '');
+
+// Repeat string
+'abc'.repeat(3);                        // 'abcabcabc'
+'abc'.repeat(3, separator: '-');        // 'abc-abc-abc'
+```
+</details>
+
+<details>
+<summary><b>Base64 Encoding</b></summary>
+
+```dart
+'hello'.toBase64();                     // 'aGVsbG8='
+'aGVsbG8='.fromBase64();                // 'hello'
+'aGVsbG8='.isBase64;                    // true
+'aGVsbG8='.toBase64Bytes();             // [104, 101, 108, 108, 111]
+
+// Encode bytes to Base64
+[72, 101, 108, 108, 111].toBase64String();  // 'SGVsbG8='
+```
+</details>
+
+<details>
+<summary><b>Validation</b></summary>
+
+```dart
+// Password validation
+'MyP@ssw0rd'.isStrongPassword;          // true (min 8 chars, upper, lower, number, special)
+'weak'.isWeakPassword;                  // true
+'MyP@ssw0rd'.passwordStrength;          // 0.8 (strength score 0.0-1.0)
+
+// Credit card (Luhn check)
+'4532015112830366'.isCreditCard;        // true
+
+// Postal codes (US, UK, Canada)
+'12345'.isPostalCode;                   // true
+'SW1A 1AA'.isPostalCode;                // true
+
+// Phone numbers
+'+1-555-123-4567'.isPhoneNumber;        // true
+'(555) 123-4567'.isPhoneNumber;         // true
+
+// MAC addresses
+'00:1B:63:84:45:E6'.isMACAddress;       // true
+'00-1B-63-84-45-E6'.isMACAddress;       // true
 ```
 </details>
 
@@ -270,6 +335,9 @@ now.humanize();                            // 'just now'
 
 ### Duration Extensions
 
+<details>
+<summary><b>Duration Operations</b></summary>
+
 ```dart
 final duration = Duration(hours: 2, minutes: 30);
 
@@ -283,10 +351,14 @@ duration.isShorterThan(Duration(hours: 5));  // true
 await 2.seconds.delay();
 await 2.seconds.delay(() => print('Done!'));
 ```
+</details>
 
 ---
 
 ### Bool Extensions
+
+<details>
+<summary><b>Boolean Operations</b></summary>
 
 ```dart
 true.choose('Yes', 'No');                  // 'Yes'
@@ -297,6 +369,167 @@ true.toYesNo();                            // 'Yes'
 false.toYesNo(trueString: 'On', falseString: 'Off');  // 'Off'
 true.not;                                  // false
 ```
+</details>
+
+---
+
+### Function Extensions
+
+<details>
+<summary><b>Function Composition & Utilities</b></summary>
+
+```dart
+// Compose functions
+final addOne = (int x) => x + 1;
+final double = (int x) => x * 2;
+final addOneThenDouble = double.compose(addOne);
+addOneThenDouble(5);                       // 12
+
+// Memoize (cache results)
+final expensive = (int x) => x * x;
+final memoized = expensive.memoize();
+
+// Debounce
+final search = (String query) => print('Searching: $query');
+final debouncedSearch = search.debounce(Duration(milliseconds: 300));
+
+// Throttle
+final update = (String data) => print('Updating: $data');
+final throttledUpdate = update.throttle(Duration(seconds: 1));
+
+// Delayed execution
+await greet.delayed(Duration(seconds: 1), 'John');
+```
+</details>
+
+---
+
+### Future Extensions
+
+<details>
+<summary><b>Async Operations</b></summary>
+
+```dart
+// Timeout with fallback
+await fetchData().timeout(
+  Duration(seconds: 5),
+  onTimeout: () => defaultValue,
+);
+
+// Retry on error
+await fetchData().retryWhen(
+  (error) => error is NetworkException,
+  maxAttempts: 3,
+);
+
+// Catch errors
+final result = await fetchData().catchError((error) => defaultValue);
+
+// Map result
+final length = await fetchString().thenMap((s) => s.length);
+
+// Delay result
+await fetchData().delay(Duration(seconds: 1));
+
+// Track loading state
+final loading = ValueNotifier(false);
+await fetchData().withLoading(loading);
+```
+</details>
+
+---
+
+### Stream Extensions
+
+<details>
+<summary><b>Stream Operations</b></summary>
+
+```dart
+// Debounce stream
+stream.debounceTime(Duration(milliseconds: 300));
+
+// Throttle stream
+stream.throttleTime(Duration(seconds: 1));
+
+// Distinct values
+stream.distinctUntilChanged();
+
+// Buffer items
+stream.bufferTime(Duration(seconds: 1));
+
+// Retry on error
+stream.retryWhen((error) => error is NetworkException);
+
+// Find first matching
+await stream.firstWhereOrNull((x) => x > 5);
+```
+</details>
+
+---
+
+### Uri Extensions
+
+<details>
+<summary><b>URL Manipulation</b></summary>
+
+```dart
+final uri = Uri.parse('https://api.example.com?key=value');
+
+// Query parameters
+uri.addQueryParam('newKey', 'newValue');
+uri.removeQueryParam('key');
+uri.hasQueryParam('key');                  // true
+uri.getQueryParam('key');                  // 'value'
+uri.replaceQueryParams({'new': 'params'});
+
+// URL analysis
+uri.isSecure;                              // true (https)
+Uri.parse('https://api.example.com').domain;      // 'example.com'
+Uri.parse('https://api.example.com').subdomain;   // 'api'
+```
+</details>
+
+---
+
+### Enum Extensions
+
+<details>
+<summary><b>Enum Utilities</b></summary>
+
+```dart
+enum Status { active, inProgress, completed }
+
+// Display name
+Status.inProgress.displayName;             // 'In Progress'
+
+// JSON conversion
+Status.active.toJson();                    // 'active'
+
+// From string
+Status.values.fromString('active');        // Status.active
+```
+</details>
+
+---
+
+### Range Extensions
+
+<details>
+<summary><b>Number Ranges</b></summary>
+
+```dart
+// Integer ranges
+1.to(5);                                   // [1, 2, 3, 4, 5]
+1.to(10, step: 2);                         // [1, 3, 5, 7, 9]
+1.until(5);                                // [1, 2, 3, 4]
+5.inRange(1, 10);                          // true
+
+// Double ranges
+1.0.to(3.0);                               // [1.0, 2.0, 3.0]
+0.0.to(1.0, step: 0.25);                   // [0.0, 0.25, 0.5, 0.75, 1.0]
+5.5.inRange(1.0, 10.0);                    // true
+```
+</details>
 
 ---
 

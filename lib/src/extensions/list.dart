@@ -421,3 +421,15 @@ extension MayrNumIterableExtensions<T extends num> on Iterable<T> {
   /// ```
   T? max() => isEmpty ? null : reduce((a, b) => a > b ? a : b);
 }
+
+extension Base64ListExtensions on List<int> {
+  /// Converts a list of bytes to a Base64 string.
+  ///
+  /// Example:
+  /// ```dart
+  /// [72, 101, 108, 108, 111].toBase64String(); // 'SGVsbG8='
+  /// ```
+  String toBase64String() {
+    return base64.encode(this);
+  }
+}

@@ -5,6 +5,86 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-01-17
+
+### Added
+
+**Function Extensions**
+- `compose()` - Compose functions together
+- `memoize()` - Cache function results
+- `debounce()` - Debounce function calls
+- `throttle()` - Throttle function calls
+- `delayed()` - Execute function after delay
+
+**Future Extensions**
+- `timeout()` - Add timeout to futures with optional fallback
+- `retryWhen()` - Retry failed futures based on error condition
+- `catchError()` - Catch and handle errors with default values
+- `thenMap()` - Map future results
+- `delay()` - Delay future completion
+- `withLoading()` - Track loading state with ValueNotifier
+
+**Stream Extensions**
+- `debounceTime()` - Debounce stream events
+- `throttleTime()` - Throttle stream events
+- `distinctUntilChanged()` - Filter consecutive duplicate values
+- `bufferTime()` - Buffer stream events over time window
+- `retryWhen()` - Retry stream on error
+- `firstWhereOrNull()` - Find first matching element or null
+
+**Uri Extensions**
+- `addQueryParam()` - Add query parameter to URI
+- `removeQueryParam()` - Remove query parameter from URI
+- `hasQueryParam()` - Check if query parameter exists
+- `getQueryParam()` - Get query parameter value
+- `replaceQueryParams()` - Replace all query parameters
+- `isSecure` - Check if URI uses HTTPS
+- `domain` - Extract domain without subdomain
+- `subdomain` - Extract subdomain from URI
+
+**Enum Extensions**
+- `displayName` - Convert enum to human-readable string
+- `toJson()` - Convert enum to JSON string
+- `fromString()` - Find enum value by string name
+
+**Range Extensions (Integer)**
+- `to()` - Create inclusive range with optional step
+- `until()` - Create exclusive range with optional step
+- `inRange()` - Check if integer is in range
+
+**Range Extensions (Double)**
+- `to()` - Create inclusive range with optional step
+- `inRange()` - Check if double is in range
+
+**String Template Extensions**
+- `format()` - Format string with named placeholders
+- `formatList()` - Format string with positional placeholders
+- `interpolate()` - Interpolate string with custom resolver
+- `repeat()` - Repeat string with optional separator
+
+**Base64 Extensions (String)**
+- `toBase64()` - Encode string to Base64
+- `fromBase64()` - Decode Base64 string
+- `isBase64` - Check if string is valid Base64
+- `toBase64Bytes()` - Convert Base64 string to bytes
+
+**Base64 Extensions (List<int>)**
+- `toBase64String()` - Encode byte list to Base64 string
+
+**Validation Extensions (String)**
+- `isStrongPassword` - Validate strong password (min 8 chars, upper, lower, number, special)
+- `isWeakPassword` - Check if password is weak
+- `passwordStrength` - Get password strength score (0.0-1.0)
+- `isCreditCard` - Validate credit card number with Luhn algorithm
+- `isPostalCode` - Validate postal codes (US, UK, Canada formats)
+- `isPhoneNumber` - Validate phone numbers
+- `isMACAddress` - Validate MAC addresses
+
+### Changed
+- Updated README.md to use consistent `<details>` sections for all extension types
+- Improved documentation structure with collapsible sections for Duration and Bool extensions
+- Enhanced features table to include all new extension types
+
 ## [1.0.0] - 2025-01-16
 
 ### Initial Release

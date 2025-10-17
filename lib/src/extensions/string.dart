@@ -268,3 +268,219 @@ extension MayrStringPatternComparisonExtensions on String {
     r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$',
   );
 }
+
+extension StringTemplateExtensions on String {
+  /// Formats the string using a map of named values.
+  ///
+  /// Example:
+  /// ```dart
+  /// 'Hello {name}, you are {age} years old'.format({'name': 'John', 'age': 30});
+  /// // 'Hello John, you are 30 years old'
+  /// ```
+  String format(Map<String, dynamic> values) {
+    String result = this;
+    values.forEach((key, value) {
+      result = result.replaceAll('{$key}', value.toString());
+    });
+    return result;
+  }
+
+  /// Formats the string using a list of positional values.
+  ///
+  /// Example:
+  /// ```dart
+  /// 'Hello {0}, you are {1} years old'.formatList(['John', 30]);
+  /// // 'Hello John, you are 30 years old'
+  /// ```
+  String formatList(List<dynamic> values) {
+    String result = this;
+    for (int i = 0; i < values.length; i++) {
+      result = result.replaceAll('{$i}', values[i].toString());
+    }
+    return result;
+  }
+
+  /// Interpolates the string using a resolver function.
+  ///
+  /// Example:
+  /// ```dart
+  /// 'Hello {name}'.interpolate((key) => key == 'name' ? 'John' : '');
+  /// // 'Hello John'
+  /// ```
+  String interpolate(dynamic Function(String) resolver) {
+    return replaceAllMapped(RegExp(r'\{([^}]+)\}'), (match) {
+      final key = match.group(1)!;
+      return resolver(key).toString();
+    });
+  }
+
+  /// Repeats the string [count] times with optional separator.
+  ///
+  /// Example:
+  /// ```dart
+  /// 'abc'.repeat(3); // 'abcabcabc'
+  /// 'abc'.repeat(3, separator: '-'); // 'abc-abc-abc'
+  /// ```
+  String repeat(int count, {String separator = ''}) {
+    if (count <= 0) return '';
+    return List.filled(count, this).join(separator);
+  }
+}
+
+extension Base64Extensions on String {
+  /// Encodes the string to Base64.
+  ///
+  /// Example:
+  /// ```dart
+  /// 'hello'.toBase64(); // 'aGVsbG8='
+  /// ```
+  String toBase64() {
+    return base64.encode(utf8.encode(this));
+  }
+
+  /// Decodes the Base64 string.
+  ///
+  /// Example:
+  /// ```dart
+  /// 'aGVsbG8='.fromBase64(); // 'hello'
+  /// ```
+  String fromBase64() {
+    return utf8.decode(base64.decode(this));
+  }
+
+  /// Checks if the string is valid Base64.
+  ///
+  /// Example:
+  /// ```dart
+  /// 'aGVsbG8='.isBase64; // true
+  /// 'not base64!'.isBase64; // false
+  /// ```
+  bool get isBase64 {
+    try {
+      base64.decode(this);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /// Converts Base64 string to bytes.
+  ///
+  /// Example:
+  /// ```dart
+  /// 'aGVsbG8='.toBase64Bytes(); // [104, 101, 108, 108, 111]
+  /// ```
+  List<int> toBase64Bytes() {
+    return base64.decode(this);
+  }
+}
+
+extension ValidationExtensions on String {
+  /// Checks if the password is strong.
+  ///
+  /// Strong: Min 8 chars, uppercase, lowercase, number, special character.
+  ///
+  /// Example:
+  /// ```dart
+  /// 'MyP@ssw0rd'.isStrongPassword; // true
+  /// 'weak'.isStrongPassword; // false
+  /// ```
+  bool get isStrongPassword {
+    if (length < 8) return false;
+    if (!matchesRegExp(r'[A-Z]')) return false; // uppercase
+    if (!matchesRegExp(r'[a-z]')) return false; // lowercase
+    if (!matchesRegExp(r'[0-9]')) return false; // number
+    if (!matchesRegExp(r'[!@#$%^&*(),.?":{}|<>]')) return false; // special
+    return true;
+  }
+
+  /// Checks if the password is weak.
+  ///
+  /// Example:
+  /// ```dart
+  /// 'weak'.isWeakPassword; // true
+  /// ```
+  bool get isWeakPassword => !isStrongPassword;
+
+  /// Returns password strength as a value between 0.0 and 1.0.
+  ///
+  /// Example:
+  /// ```dart
+  /// 'MyP@ssw0rd'.passwordStrength; // ~0.8
+  /// 'weak'.passwordStrength; // ~0.2
+  /// ```
+  double get passwordStrength {
+    double strength = 0.0;
+    if (length >= 8) strength += 0.2;
+    if (length >= 12) strength += 0.1;
+    if (matchesRegExp(r'[A-Z]')) strength += 0.2;
+    if (matchesRegExp(r'[a-z]')) strength += 0.2;
+    if (matchesRegExp(r'[0-9]')) strength += 0.15;
+    if (matchesRegExp(r'[!@#$%^&*(),.?":{}|<>]')) strength += 0.15;
+    return strength.clamp(0.0, 1.0);
+  }
+
+  /// Checks if the string is a valid credit card number (basic Luhn check).
+  ///
+  /// Example:
+  /// ```dart
+  /// '4532015112830366'.isCreditCard; // true
+  /// ```
+  bool get isCreditCard {
+    final cleaned = replaceAll(RegExp(r'\s+'), '');
+    if (!cleaned.matchesRegExp(r'^\d{13,19}$')) return false;
+
+    int sum = 0;
+    bool alternate = false;
+    for (int i = cleaned.length - 1; i >= 0; i--) {
+      int digit = int.parse(cleaned[i]);
+      if (alternate) {
+        digit *= 2;
+        if (digit > 9) digit -= 9;
+      }
+      sum += digit;
+      alternate = !alternate;
+    }
+    return sum % 10 == 0;
+  }
+
+  /// Checks if the string is a valid postal code (basic patterns).
+  ///
+  /// Example:
+  /// ```dart
+  /// '12345'.isPostalCode; // true (US)
+  /// 'SW1A 1AA'.isPostalCode; // true (UK)
+  /// ```
+  bool get isPostalCode {
+    // US: 12345 or 12345-6789
+    if (matchesRegExp(r'^\d{5}(-\d{4})?$')) return true;
+    // UK: SW1A 1AA
+    if (matchesRegExp(r'^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$')) return true;
+    // Canada: A1A 1A1
+    if (matchesRegExp(r'^[A-Z]\d[A-Z] ?\d[A-Z]\d$')) return true;
+    return false;
+  }
+
+  /// Checks if the string is a valid phone number (basic pattern).
+  ///
+  /// Example:
+  /// ```dart
+  /// '+1-555-123-4567'.isPhoneNumber; // true
+  /// '(555) 123-4567'.isPhoneNumber; // true
+  /// ```
+  bool get isPhoneNumber {
+    final cleaned = replaceAll(RegExp(r'[\s\-\(\)]'), '');
+    return cleaned.matchesRegExp(r'^\+?\d{10,15}$');
+  }
+
+  /// Checks if the string is a valid MAC address.
+  ///
+  /// Example:
+  /// ```dart
+  /// '00:1B:63:84:45:E6'.isMACAddress; // true
+  /// '00-1B-63-84-45-E6'.isMACAddress; // true
+  /// ```
+  bool get isMACAddress {
+    return matchesRegExp(r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$');
+  }
+}
