@@ -7,7 +7,7 @@ void main() {
       final addOne = (int x) => x + 1;
       final double = (int x) => x * 2;
       final addOneThenDouble = double.compose(addOne);
-      
+
       expect(addOneThenDouble(5), 12); // (5 + 1) * 2 = 12
     });
 

@@ -481,8 +481,6 @@ extension ValidationExtensions on String {
   /// '00-1B-63-84-45-E6'.isMACAddress; // true
   /// ```
   bool get isMACAddress {
-    return matchesRegExp(
-      r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$',
-    );
+    return matchesRegExp(r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$');
   }
 }

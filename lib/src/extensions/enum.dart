@@ -16,10 +16,13 @@ extension EnumExtensions<T extends Enum> on T {
       (m) => '${m[1]} ${m[2]}',
     );
     // Capitalize first letter of each word
-    return result.split(' ').map((word) {
-      if (word.isEmpty) return word;
-      return word[0].toUpperCase() + word.substring(1);
-    }).join(' ');
+    return result
+        .split(' ')
+        .map((word) {
+          if (word.isEmpty) return word;
+          return word[0].toUpperCase() + word.substring(1);
+        })
+        .join(' ');
   }
 
   /// Converts enum to JSON string representation.

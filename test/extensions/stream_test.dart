@@ -6,7 +6,9 @@ void main() {
   group('StreamExtensions', () {
     test('debounceTime emits after duration of inactivity', () async {
       final controller = StreamController<int>();
-      final debounced = controller.stream.debounceTime(Duration(milliseconds: 100));
+      final debounced = controller.stream.debounceTime(
+        Duration(milliseconds: 100),
+      );
       final results = <int>[];
 
       debounced.listen(results.add);
@@ -24,7 +26,9 @@ void main() {
 
     test('throttleTime emits at most once per duration', () async {
       final controller = StreamController<int>();
-      final throttled = controller.stream.throttleTime(Duration(milliseconds: 100));
+      final throttled = controller.stream.throttleTime(
+        Duration(milliseconds: 100),
+      );
       final results = <int>[];
 
       throttled.listen(results.add);
@@ -63,14 +67,14 @@ void main() {
     test('firstWhereOrNull returns matching element', () async {
       final stream = Stream.fromIterable([1, 2, 3, 4, 5]);
       final result = await stream.firstWhereOrNull((x) => x > 3);
-      
+
       expect(result, 4);
     });
 
     test('firstWhereOrNull returns null when no match', () async {
       final stream = Stream.fromIterable([1, 2, 3]);
       final result = await stream.firstWhereOrNull((x) => x > 5);
-      
+
       expect(result, null);
     });
   });

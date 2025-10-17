@@ -8,13 +8,16 @@ void main() {
         'name': 'John',
         'age': 30,
       });
-      
+
       expect(result, 'Hello John, you are 30 years old');
     });
 
     test('formatList replaces positional placeholders', () {
-      final result = 'Hello {0}, you are {1} years old'.formatList(['John', 30]);
-      
+      final result = 'Hello {0}, you are {1} years old'.formatList([
+        'John',
+        30,
+      ]);
+
       expect(result, 'Hello John, you are 30 years old');
     });
 
@@ -24,7 +27,7 @@ void main() {
         if (key == 'greeting') return 'welcome!';
         return '';
       });
-      
+
       expect(result, 'Hello John, welcome!');
     });
 
