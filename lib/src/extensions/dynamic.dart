@@ -1,5 +1,8 @@
 part of './../extensions.dart';
 
+// Helper constant to check if we're in debug mode (pure Dart)
+const bool _kDebugMode = !bool.fromEnvironment('dart.vm.product');
+
 extension MayrDynamicExtensions on dynamic {
   /// Returns null only in debug mode; retains value in release/profile mode.
   ///
@@ -12,7 +15,7 @@ extension MayrDynamicExtensions on dynamic {
   /// // In debug mode: null
   /// // In release mode: actual user ID
   /// ```
-  T? nullOnDebug<T>() => kDebugMode ? null : this;
+  T? nullOnDebug<T>() => _kDebugMode ? null : this;
 
   /// Returns the value only in debug mode, otherwise returns null.
   ///
@@ -24,7 +27,7 @@ extension MayrDynamicExtensions on dynamic {
   /// // In debug mode: actual debug info
   /// // In release mode: null
   /// ```
-  T? onlyOnDebug<T>() => kDebugMode ? this : null;
+  T? onlyOnDebug<T>() => _kDebugMode ? this : null;
 
   /// Randomly returns null or value based on the given probability.
   ///
